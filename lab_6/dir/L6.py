@@ -3,4 +3,4 @@ path = r"C:\PyhtonPractice\folder"
 upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 for letter in upper:
     os.chdir(path)
-    os.mkdir(letter + ".txt")
+    open(letter + ".txt", 'a').close()
