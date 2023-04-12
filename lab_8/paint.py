@@ -2,7 +2,7 @@ import pygame as pg
 import random
 
 pg.init()
-screen = pg.display.set_mode((1920, 1070))
+screen = pg.display.set_mode((1920, 1080))
 pg.display.set_caption("paint")
 clock = pg.time.Clock()
 
@@ -41,9 +41,9 @@ def draw(mode):
         if mode == "line":
             pg.draw.circle(screen, colour, (posX, posY), 30)
         elif mode == "square":
-            pg.draw.rect(screen, colour, pg.Rect(posX, posY, 80, 100),1)
+            pg.draw.rect(screen, colour, pg.Rect(posX, posY, 80, 100), 1)
         elif mode == "circle":
-            pg.draw.circle(screen, colour, (posX, posY), 60,1)
+            pg.draw.circle(screen, colour, (posX, posY), 60, 1)
         elif mode == "eraser":
              pg.draw.circle(screen, (0,0,0), (posX, posY), 40)
 def clear_all():

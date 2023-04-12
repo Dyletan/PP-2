@@ -52,6 +52,22 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
 
 
+class Coin(pygame.sprite.Sprite):
+      def __init__(self):
+        super().__init__() 
+        self.image = pygame.image.load(r"C:\PP 2\lab_8\racer\coin.png")
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.center = (random.randint(40,SCREEN_WIDTH-40), 0)
+
+      def move(self):
+        global SCORE
+        self.rect.move_ip(0,5)
+        if (self.rect.bottom > 600):
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -73,6 +89,7 @@ class Player(pygame.sprite.Sprite):
 #Setting up Sprites        
 P1 = Player()
 E1 = Enemy()
+C1 = Coin()
 
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()
@@ -80,11 +97,15 @@ enemies.add(E1)
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 all_sprites.add(E1)
+# all_sprites.add(C1)
 
 #Adding a new User event 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
 
+coins = 0
+time_of_collision = time.time()
+collision = False
 #Game Loop
 while True:
       
@@ -101,6 +122,8 @@ while True:
     scores = font_small.render(str(SCORE), True, BLACK)
     DISPLAYSURF.blit(scores, (10,10))
 
+    score_coin = font_small.render("Coins: " + str(coins), True, BLACK)
+    DISPLAYSURF.blit(score_coin, (300,10))
     #Moves and Re-draws all Sprites
     for entity in all_sprites:
         entity.move()
@@ -109,18 +132,34 @@ while True:
 
     #To be run if collision occurs between Player and Enemy
     if pygame.sprite.spritecollideany(P1, enemies):
-          pygame.mixer.Sound(r'C:\PP 2\lab_8\racer\crash.wav').play()
-          time.sleep(1)
-                   
-          DISPLAYSURF.fill(RED)
-          DISPLAYSURF.blit(game_over, (30,250))
-          
-          pygame.display.update()
-          for entity in all_sprites:
-                entity.kill() 
-          time.sleep(2)
-          pygame.quit()
-          sys.exit()        
+        pygame.mixer.Sound(r'C:\PP 2\lab_8\racer\crash.wav').play()
+        time.sleep(1)
+                
+        DISPLAYSURF.fill(RED)
+        DISPLAYSURF.blit(game_over, (30,250))
         
+        pygame.display.update()
+        for entity in all_sprites:
+            entity.kill() 
+        time.sleep(2)
+        pygame.quit()
+        sys.exit()
+
+    cur_time = time.time()
+    
+    if C1.rect.colliderect(P1.rect):
+        if cur_time - time_of_collision > 0.5:
+            time_of_collision = time.time()
+            coins += 1
+            collision = True
+
+    C1.move()
+
+    if not collision:
+        DISPLAYSURF.blit(C1.image, C1.rect)
+        time3 = time.time()
+    if cur_time - time3 > (0.5):
+        time3 = time.time()
+        collision = False
     pygame.display.update()
     FramePerSec.tick(FPS)
