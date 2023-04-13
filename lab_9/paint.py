@@ -1,5 +1,4 @@
 import pygame as pg
-import random
 
 pg.init()
 screen = pg.display.set_mode((1920, 1080))
@@ -15,7 +14,6 @@ redRect = pg.Rect(0, 0, 50, 50)
 blueRect = pg.Rect(50, 0, 50, 50)
 pinkRect = pg.Rect(100, 0, 50, 50)
 grayRect = pg.Rect(150, 0, 50, 50)
-
 
 rects = [[red, redRect], [blue, blueRect], [pink, pinkRect], [gray, grayRect]]
 colour = (100, 120, 140)
@@ -62,6 +60,7 @@ def draw(mode):
             pg.draw.line(screen, colour, (posX+size*0.5, posY+size*3**0.5/2), (posX+size, posY), 1)
         elif mode == "eraser":
             pg.draw.circle(screen, (0,0,0), (posX, posY), size)
+            
 def clear_all():
         key = pg.key.get_pressed()
         if key[pg.K_LCTRL] and key[pg.K_c]:
